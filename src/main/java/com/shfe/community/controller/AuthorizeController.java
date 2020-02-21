@@ -2,7 +2,10 @@ package com.shfe.community.controller;
 
 import com.shfe.community.dto.AccessTokenDTO;
 import com.shfe.community.dto.GithubUser;
+import com.shfe.community.mapper.UserMapper;
+import com.shfe.community.model.User;
 import com.shfe.community.provider.GithubProvider;
+import org.h2.mvstore.FreeSpaceBitSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -10,7 +13,12 @@ import org.springframework.validation.beanvalidation.SpringValidatorAdapter;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.security.PrivateKey;
+import java.util.UUID;
 
 @Controller
 public class AuthorizeController {
@@ -30,6 +38,9 @@ public class AuthorizeController {
     @Value("${github.redirecturl}")
     private String redirecturl;
 
+    @Autowired
+    private UserMapper userMapper;
+
     /*
     * 整个流程参考github Oauth 流程：https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/
     * 先需要申请Oauth app ，获取github 提供client id 和 Client Secret
@@ -42,7 +53,9 @@ public class AuthorizeController {
     * */
     @GetMapping("/callback")
     public String callback(@RequestParam (name = "code") String code,
-                           @RequestParam(name= "state") String state){
+                           @RequestParam(name= "state") String state,
+                           HttpServletRequest request,
+                           HttpServletResponse response){
 
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
         accessTokenDTO.setClient_id(client_id);
@@ -52,10 +65,34 @@ public class AuthorizeController {
         accessTokenDTO.setState(state);
         String accessToken = githubProvider.getAccessToken(accessTokenDTO);
 //        注意user 对象有可能为null, 因此打印的时候会抛出异常
-        GithubUser user = githubProvider.getUser(accessToken);
-        
-        System.out.println(user.toString());
-//        System.out.println(user.getName());
-        return "index";
+        GithubUser githubUser = githubProvider.getUser(accessToken);
+        if (githubUser != null) {
+//            记录用户信息到h2 数据库中的user 表
+            User user = new User();
+            String token = UUID.randomUUID().toString();
+            user.setToken(token);
+            user.setName(githubUser.getName());
+//            转换int为string
+            user.setAccount_id(String.valueOf(githubUser.getId()));
+            user.setGmt_create(System.currentTimeMillis());
+            user.setGmt_modified(user.getGmt_create());
+
+            userMapper.insert(user);
+
+//            执行数据库插入后，可以token写入cookie信息
+            response.addCookie(new Cookie("token",token));
+
+//            在HttpServerletRequest对象中设置session 属性user存储GithubUser 对象，同时系统会自动将jsessionid写入cookie
+//            request.getSession().setAttribute("githubUser",githubUser);
+//            自动返回首页index.html
+            return "redirect:/";
+        } else {
+            return "redirect:/";
+
+        }
+
+//        System.out.println(githubUser.toString());
+//        System.out.println(githubUser.getName());
+//        return "index";
     }
 }
