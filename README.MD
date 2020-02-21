@@ -6,7 +6,7 @@
 [github oauth开发](https://developer.github.com/apps/building-oauth-apps/)
 [使用okhttp简化调用web服务](https://square.github.io/okhttp/)
 [搜索jar包的mven配置写法](https://mvnrepository.com/)
-
+[数据库迁移管理脚本](https://flywaydb.org/getstarted/firststeps/maven)
 ###IDEA操作快捷键
 ####编辑器最大化：Ctrl+Shift+F12
 ####竖行输入：alt+鼠标左键拖动
@@ -71,7 +71,11 @@ spring.datasource.username=sa
 spring.datasource.password=123
 spring.datasource.driver-class-name=org.h2.Driver
 ```
-
+##启用flywaydb 可以自动执行脚本保证开发和生产数据库保持一致
+把修改数据库的脚本按照版本号方式命名，并存放到resource/db/migration目录下
+文件名为 V1__create_user_table.sql, V2__alter_user_add_bio.sql等
+这样执行mvn flyway:migration 就会自动执行这些SQL脚本
+[中文flywaydb使用介绍](https://www.cnblogs.com/ywjy/p/10959475.html)
 
 ##git 操作
 ```shell script
