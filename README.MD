@@ -1,5 +1,7 @@
 
 ##资料
+[学习项目地址](https://github.com/codedrinker/community)
+[maven仓库配置](https://www.cnblogs.com/winner-0715/p/7493387.html)
 [bootstrap资料](https://v3.bootcss.com/getting-started/)
 [Spring boot 指导文档](https://spring.io/guides/)
 [elasticsearch参照网址](https://elasticsearch.cn/explore)
@@ -7,6 +9,8 @@
 [使用okhttp简化调用web服务](https://square.github.io/okhttp/)
 [搜索jar包的mven配置写法](https://mvnrepository.com/)
 [数据库迁移管理脚本](https://flywaydb.org/getstarted/firststeps/maven)
+[thymeleaf官方地址](https://www.thymeleaf.org)
+[简化get/set方法的lombok插件](https://projectlombok.org)
 ###IDEA操作快捷键
 ####编辑器最大化：Ctrl+Shift+F12
 ####竖行输入：alt+鼠标左键拖动
@@ -29,6 +33,7 @@ spring.thymeleaf.cache=false
 禁止leymleaf 缓存html
 在idea中修改html后 ctrl+f9 重新编译页面，既可以不用重启应用获得新的页面
 [参考：IDEA SpringBoot Thymeleaf热部署实现更改页面不重启](https://blog.csdn.net/CoderBruis/article/details/89705013)
+[thymeleaf模板框架用法](https://blog.csdn.net/u013399093/article/details/51768506)
 
 ###添加H2数据库
 [参考h2 官方网页](http://www.h2database.com/html/quickstart.html)
@@ -74,7 +79,7 @@ spring.datasource.driver-class-name=org.h2.Driver
 ##启用flywaydb 可以自动执行脚本保证开发和生产数据库保持一致
 把修改数据库的脚本按照版本号方式命名，并存放到resource/db/migration目录下
 文件名为 V1__create_user_table.sql, V2__alter_user_add_bio.sql等
-这样执行mvn flyway:migration 就会自动执行这些SQL脚本
+这样执行mvn flyway:migrate 就会自动执行这些SQL脚本
 [中文flywaydb使用介绍](https://www.cnblogs.com/ywjy/p/10959475.html)
 
 ##git 操作
@@ -98,4 +103,18 @@ git config --global credential.helper store
 查看.gitconfig，出现以下内容：
 [credential] helper = store
 以后再git push就不会输入用户
+ 
+ ###lombok 简化set/get 方法
+在程序中加入@Data注解 可以避免因增加或修改字段而重复set/get方法 
+ 
+ ###项目工程的目录设计
+ controller:响应用户访问请求
+ dto: 封装调用API的参数
+ provider: 封装调用API的方法
+ mapper: 封装mybatis用来读写数据的方法，方法中需要调用Model中对象
+ model:对应数据表的bean对象
+ service:组装多个数据库对象到一起
+ 调用外部API的次序： controller->provider->dto
+ 调用数据库访问的次序: controller->service->mapper->model  或者 controller->mapper->model
+ 
  
