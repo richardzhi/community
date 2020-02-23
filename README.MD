@@ -161,6 +161,7 @@ git push 远程别名 本地分支名 #　如：git push zlj_origin drug-supervi
  调用外部API的次序： controller->provider->dto
  调用数据库访问的次序: controller->service->mapper->model  或者 controller->mapper->model
  
- ##配置自动化
-![图片测试](https://raw.githubusercontent.com/richardzhi/pic/master/%E6%9D%80%E6%89%8B47.jfif?token=AAQOG7LT77BGEKCABMP5SGC6KH2TC)
+ ##配置自动
+ ![图片测试](https://raw.githubusercontent.com/richardzhi/image/master/1.jpg)
+
  
