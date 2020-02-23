@@ -63,22 +63,24 @@
             <form action="/publish" method="post">
                 <div class="form-group">
                     <label for="title">问题标题 (简单扼要) :</label>
-                    <input type="text" class="form-control" th:value="*{title}" id="title" name="title" placeholder="问题标题">
+                    <input type="text" class="form-control" th:value="${title}" id="title" name="title" placeholder="问题标题">
                 </div>
                 <div class="form-group">
                     <label for="description">问题补充 (必填，参照提示) :</label>
-                    <textarea name="description" id="description" class="form-control" th:value="*{description}" cols="30" rows="10"></textarea>
+                    <textarea name="description" id="description" class="form-control" th:text="${description}" cols="30" rows="10"></textarea>
 
                 </div>
                 <div class="form-group">
                     <label for="tag">添加标签：</label>
-                    <input type="text" class="form-control" th:value="*{tag}" id="tag" name="tag" placeholder="输入标签，以,隔开">
+                    <input type="text" class="form-control" th:value="${tag}" id="tag" name="tag" placeholder="输入标签，以,隔开">
                 </div>
                 <div class="container-fluid main">
                     <div class="row">
                         <!--页面model返回的error参数被显示秤警告条,警告条长度占布局的3/4-->
-                        <div class="alert alert-danger col-lg-9 col-md-12 col-sm-12 col-xs-12" th:text="${error}"
-                             th:if="${error != null}"></div>
+                        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+<!--                            如果没有错误，错误警告条隐藏-->
+                            <div class="alert alert-danger col-lg-12 col-md-12 col-sm-12 col-xs-12" th:text="${error}" th:if="${error != null}"></div>
+                        </div>
                         <div col-lg-3 col-md-12 col-sm-12 col-xs-12></div>
                         <button type="submit" class="btn btn-success btn-publish">发布</button>
                     </div>

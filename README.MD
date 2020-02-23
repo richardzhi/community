@@ -11,13 +11,14 @@
 [数据库迁移管理脚本](https://flywaydb.org/getstarted/firststeps/maven)
 [thymeleaf官方地址](https://www.thymeleaf.org)
 [简化get/set方法的lombok插件](https://projectlombok.org)
+[mybatis中文文档](https://mybatis.org/mybatis-3/zh/index.html)
 ###IDEA操作快捷键
 ####编辑器最大化：Ctrl+Shift+F12
 ####竖行输入：alt+鼠标左键拖动
 ####生成代码(如get,set方法,构造函数等): Alt+Insert 或者右键（Generate）
 ####代码标签 生成循环、System.out、main方法:   fori/sout/psvm+Tab
 例如要输入for(User user : users)只需输入user.for+Tab
-####查找文件，类，符号:Ctrl+N
+####查找类:Ctrl+N, 查找文件：ctrl+shift+N
 ####自动生成变量定义:Ctrl+Alt+v
 ####快速新创建一行：shift+enter
 ####加try catch:ctrl+alt+t
@@ -94,11 +95,54 @@ git push -u origin master
 
 #用bash git，在用户目录下创建文件，修改内容
 touch .git-credentials
-vim .git-credentials
+vim .git-credentials #加入下面内容
 https://{username}:{password}@github.com
-
+#执行命令
 git config --global credential.helper store
 
+##分支管理的例子
+#创建分支
+git branch test
+# 切换到test分支
+git checkout test
+# 查看分支，当前已经在test分支上面
+git branch
+* test
+  master
+# 在当前分支上进行一些修改，把内容‘123123’添加到hello.txt文件中
+echo "123123" >> hello.txt
+## 添加并提交修改到本地
+git add hello.txt
+git commit -m "add hello.txt"
+#推送到远程，因为现在远程还没有test分支，所以需要set-upstream
+git push --set-upstream origin test
+#test解决后，把修改合并会master，并删除test分支
+#切换到主分支
+git checkout master
+Switched to branch 'master'
+Your branch is up to date with 'origin/master'.
+#把test分支的内容合并到主分支master
+git merge test
+Updating 2d0f8f9..bc9a5ca
+Fast-forward
+ qwe | 1 +
+ 1 file changed, 1 insertion(+)
+#删除分支test
+git branch -d test
+Deleted branch wy (was bc9a5ca). create mode 100644 qwe
+## push 到主分支
+$ git push
+Total 0 (delta 0), reused 0 (delta 0)
+To https://github.com/xxxx/xxxx.git
+   2d0f8f9..bc9a5ca  master -> master
+# 删除远程分支
+git push origin :test
+To https://github.com/xxxx/xxxx.git
+ - [deleted]         test
+
+
+git checkout -b 本地分支名 远程分支名　　#如：git checkout -b monitor origin/monitor
+git push 远程别名 本地分支名 #　如：git push zlj_origin drug-supervision-monitor
 ```
 查看.gitconfig，出现以下内容：
 [credential] helper = store
@@ -117,4 +161,6 @@ git config --global credential.helper store
  调用外部API的次序： controller->provider->dto
  调用数据库访问的次序: controller->service->mapper->model  或者 controller->mapper->model
  
+ ##配置自动化
+![图片测试](https://raw.githubusercontent.com/richardzhi/pic/master/%E6%9D%80%E6%89%8B47.jfif?token=AAQOG7LT77BGEKCABMP5SGC6KH2TC)
  
