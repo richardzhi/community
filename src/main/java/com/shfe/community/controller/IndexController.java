@@ -1,11 +1,13 @@
 package com.shfe.community.controller;
 
+import com.shfe.community.dto.PaginationDTO;
 import com.shfe.community.dto.QuestionDTO;
 import com.shfe.community.mapper.QuestionMapper;
 import com.shfe.community.mapper.UserMapper;
 import com.shfe.community.model.Question;
 import com.shfe.community.model.User;
 import com.shfe.community.service.QuestionService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,8 +28,12 @@ public class IndexController {
     private QuestionService questionService;
 
     @GetMapping("/")
-    public String index(HttpServletRequest request,Model model){
+    public String index(HttpServletRequest request,Model model,
+                        @RequestParam(name = "page",defaultValue = "1") Integer page,
+                        @RequestParam(name = "size",defaultValue = "5") Integer size
+                        ){
 //        读取请求带来的cookie信息，取出其中的token, 到后台数据库中查询token, 验证用户是否已登录
+//        传入页号和每页大小
         Cookie[] cookies = request.getCookies();
         if (cookies != null && cookies.length!=0 ) {
             for (Cookie cookie : cookies) {
@@ -42,8 +48,12 @@ public class IndexController {
                 }
             }
         }
-        List<QuestionDTO> questionList=questionService.list();
-        model.addAttribute("questions",questionList);
+        PaginationDTO pagination =questionService.list(page,size);
+
+//        for (QuestionDTO questionDTO : questionList) {
+//            questionDTO.setDescription("哈哈");
+//        }
+        model.addAttribute("pagination",pagination);
         return ("index");
 
     }

@@ -25,7 +25,7 @@
 ####注释(// 或者/*...*/ ): Ctrl+/ 或 Ctrl+Shift+/  
 ####返沪上次操作的位置：ctrl+E
 ####删除无效的引入,选择后：ctrl+alt+o
-###热加载
+
 ####页面热加载
 修改application.properties 中加入
 ```properties
@@ -162,6 +162,17 @@ git push 远程别名 本地分支名 #　如：git push zlj_origin drug-supervi
  调用数据库访问的次序: controller->service->mapper->model  或者 controller->mapper->model
  
  ##配置自动
- ![图片测试](https://raw.githubusercontent.com/richardzhi/image/master/1.jpg)
+ 更改pom.xml, 加入spring-boot-devtools, 可以激活spring 当class path下的文件发生变化的时候自动重启
+ ```xml
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+        </dependency>
+```
+ idea设置compile 选项为自动编译，不过只能在非运行状态下执行；
+ 为设置在debug和运行时自动编译, 按shift+ctrl+alt+?  选择registry, 勾选compiler.automake.allow.when.app.running
+在spring dev中安装了livereload 服务，当浏览器安装livereload 插件后，浏览器会自动更新页面
+[livereload插件地址】(http://livereload.com/extensions/)
 
  
